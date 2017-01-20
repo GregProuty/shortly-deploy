@@ -29,15 +29,15 @@ module.exports = function(grunt) {
 
     uglify: {
 
-      options: {
-        mangle: false
-          },
-          my_target: {
-            files: {
-              'dest/output.min.js': ['dest/built.js']
-            }
-          }
-        }
+      // options: {
+      //   mangle: false
+      //     },
+      //     my_target: {
+      //       files: {
+      //         'dest/output.min.js': ['dest/built.js']
+      //       }
+      //     }
+      //   }
     },
 
     eslint: {
