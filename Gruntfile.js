@@ -7,8 +7,8 @@ module.exports = function(grunt) {
         seperator: ';',
       }, 
       dist: {
-        src: ['client/app.js', 'client/createLinkView.js', 'client/link.js', 'client/links.js', 'client/linksView.js', 'client/linkView.js', 'client/router.js'],
-        dest: 'client/built.js',
+        src: ['client/app.js', 'client/src/createLinkView.js', 'client/src/link.js', 'client/src/links.js', 'client/src/linksView.js', 'client/src/linkView.js', 'client/src/router.js'],
+        dest: 'dest/built.js',
       }
     },
 
@@ -28,6 +28,16 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+
+      options: {
+        mangle: false
+          },
+          my_target: {
+            files: {
+              'dest/output.min.js': ['dest/built.js']
+            }
+          }
+        }
     },
 
     eslint: {
@@ -37,12 +47,15 @@ module.exports = function(grunt) {
     },
 
     cssmin: {
+      css: {
+        src: ''
+      }
     },
 
     watch: {
       scripts: {
         files: [
-          'public/client/**/*.js',
+          'public/client/src/**/*.js',
           'public/lib/**/*.js',
         ],
         tasks: [
