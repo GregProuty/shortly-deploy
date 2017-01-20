@@ -60,13 +60,13 @@ module.exports = function(grunt) {
         ],
         tasks: [
           'concat',
-          'uglify'
+          // 'uglify'
         ]
       },
-      css: {
-        files: 'public/*.css',
-        tasks: ['cssmin']
-      }
+      // css: {
+      //   files: 'public/*.css',
+      //   tasks: ['cssmin']
+      // }
     },
 
     shell: {
