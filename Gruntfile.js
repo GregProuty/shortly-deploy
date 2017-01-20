@@ -74,7 +74,7 @@ module.exports = function(grunt) {
       },
       css: {
         files: 'public/*.css',
-        // tasks: ['cssmin']
+
       }
     },
 
@@ -97,13 +97,13 @@ module.exports = function(grunt) {
   grunt.registerTask('server-dev', function (target) {
     // Running nodejs in a different process and displaying output on the main console
     var nodemon = grunt.util.spawn({
-         cmd: 'grunt',
-         grunt: true,
-         args: 'nodemon'
+      cmd: 'grunt',
+      grunt: true,
+      args: 'nodemon'
     });
     nodemon.stdout.pipe(process.stdout);
     nodemon.stderr.pipe(process.stderr);
-    console.log("Yay!!!")
+    console.log('Yay!!!');
     grunt.task.run([ 'watch', 'test', 'shell' ], grunt.fatal);
   });
 
@@ -113,7 +113,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', [
     'mochaTest'
-    ]);
+  ]);
 
   grunt.registerTask('build', [
     'concat:dist',
@@ -125,8 +125,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('upload', function(n) {
 
-    if(grunt.option('prod')) {
-      console.log("we are in prod");
+    if (grunt.option('prod')) {
+      console.log('we are in prod');
       grunt.task.run(['jshint']);
       grunt.task.run(['shell']);
       // grunt.fatal(['jshint', 'test']);
