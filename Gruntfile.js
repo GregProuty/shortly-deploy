@@ -7,8 +7,12 @@ module.exports = function(grunt) {
         seperator: ';',
       }, 
       dist: {
-        src: ['client/app.js', 'client/src/createLinkView.js', 'client/src/link.js', 'client/src/links.js', 'client/src/linksView.js', 'client/src/linkView.js', 'client/src/router.js'],
-        dest: 'dest/built.js',
+        src: ['app/**/*/.js',
+        './server-config.js',
+        './server.js',
+        'public/client/*.js',
+        'lib/*.js'],
+        dest: './public/dist/built.js',
       }
     },
 
@@ -28,16 +32,10 @@ module.exports = function(grunt) {
     },
 
     uglify: {
-
-      // options: {
-      //   mangle: false
-      //     },
-      //     my_target: {
-      //       files: {
-      //         'dest/output.min.js': ['dest/built.js']
-      //       }
-      //     }
-      //   }
+      build: {
+        src: './public/dist/built.js',
+        dest: './public/dist/built.min.js'
+      }
     },
 
     eslint: {
@@ -60,17 +58,18 @@ module.exports = function(grunt) {
         ],
         tasks: [
           'concat',
-          // 'uglify'
+          'uglify'
         ]
       },
-      // css: {
-      //   files: 'public/*.css',
-      //   tasks: ['cssmin']
-      // }
+      css: {
+        files: 'public/*.css',
+        tasks: ['cssmin']
+      }
     },
 
     shell: {
       prodServer: {
+        command: 'git push origin master'
       }
     },
   });
@@ -97,11 +96,16 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'concat:dist',
+    'uglify'
   ]);
 
   grunt.registerTask('upload', function(n) {
-    if (grunt.option('prod')) {
-      // add your production server task here
+    console.log("we are in prod");
+      grunt.task.run(['jshint']);
+      grunt.task.run(['shell']);
+      // grunt.fatal(['jshint', 'test']);
+      // grunt.task.run(['shell']);
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
@@ -109,6 +113,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('deploy', [
     // add your deploy tasks here
+        'build', 'upload'
   ]);
 
 
