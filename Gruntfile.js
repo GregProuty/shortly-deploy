@@ -47,9 +47,9 @@ module.exports = function(grunt) {
     },
 
     cssmin: {
-      css: {
-        src: ''
-      }
+      // css: {
+      //   src: ''
+      // }
     },
 
     watch: {
