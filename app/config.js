@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+var mongoURL = process.env.URL || 'mongodb://localhost/shortly-deploy';
+mongoose.connect(mongoURL);
 
 
 var db = mongoose.connection;
