@@ -4,15 +4,17 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     concat: {
       options: {
-        seperator: ';',
-      }, 
+        separator: ';'
+      },
       dist: {
-        src: ['app/**/*/.js',
-        './server-config.js',
-        './server.js',
-        'public/client/*.js',
-        'lib/*.js'],
-        dest: './public/dist/built.js',
+        src: [
+          'app/**/*.js',
+          './server-config.js',
+          './server.js',
+          'public/client/*.js',
+          'lib/*.js'
+        ],
+        dest: './public/dist/built.js'
       }
     },
 
@@ -21,7 +23,7 @@ module.exports = function(grunt) {
         options: {
           reporter: 'spec'
         },
-        src: ['test/**/*.js']
+        src: ['test/*.js']
       }
     },
 
@@ -32,28 +34,37 @@ module.exports = function(grunt) {
     },
 
     uglify: {
-      build: {
+      build:{
         src: './public/dist/built.js',
         dest: './public/dist/built.min.js'
       }
     },
 
-    eslint: {
-      target: [
-        // Add list of files to lint here
-      ]
+    jshint: {
+      files: [
+        'app/**/*.js',
+        './server-config.js',
+        './server.js',
+        'public/client/*.js',
+        'lib/*.js'
+      ],
+      options: {
+        force: false,
+        jshintrc: '.jshintrc',
+        ignores: [
+          'public/lib/**/*.js',
+          'public/dist/**/*.js'
+        ]
+      }
     },
 
     cssmin: {
-      // css: {
-      //   src: ''
-      // }
     },
 
     watch: {
       scripts: {
         files: [
-          'public/client/src/**/*.js',
+          'public/client/**/*.js',
           'public/lib/**/*.js',
         ],
         tasks: [
@@ -69,22 +80,31 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
-        command: 'git push origin master'
+        command: 'git push origin master \n git push azure master'
       }
     },
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
 
   grunt.registerTask('server-dev', function (target) {
-    grunt.task.run([ 'nodemon', 'watch' ]);
+    // Running nodejs in a different process and displaying output on the main console
+    var nodemon = grunt.util.spawn({
+         cmd: 'grunt',
+         grunt: true,
+         args: 'nodemon'
+    });
+    nodemon.stdout.pipe(process.stdout);
+    nodemon.stderr.pipe(process.stderr);
+    console.log("Yay!!!")
+    grunt.task.run([ 'watch', 'test', 'shell' ], grunt.fatal);
   });
 
   ////////////////////////////////////////////////////
@@ -93,15 +113,20 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', [
     'mochaTest'
-  ]);
+    ]);
 
   grunt.registerTask('build', [
     'concat:dist',
     'uglify'
+    //gets it ready for the deployment
+    //we want to run uglify, etc. here
+    //minify, etc.
   ]);
 
   grunt.registerTask('upload', function(n) {
-    console.log("we are in prod");
+
+    if(grunt.option('prod')) {
+      console.log("we are in prod");
       grunt.task.run(['jshint']);
       grunt.task.run(['shell']);
       // grunt.fatal(['jshint', 'test']);
@@ -112,9 +137,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('deploy', [
-    // add your deploy tasks here
-        'build', 'upload'
+    //deploy calls build and upload
+    'build', 'upload'
   ]);
-
-
 };
